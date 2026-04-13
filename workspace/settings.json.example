@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/verify-session-discipline.sh",
+            "timeout": 10,
+            "statusMessage": "Verifying session discipline..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protocol-reminder.sh",
+            "timeout": 5,
+            "statusMessage": "Checking protocol..."
+          }
+        ]
+      }
+    ]
+  }
+}
