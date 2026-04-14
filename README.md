@@ -133,6 +133,7 @@ Merge hook registrations into `.claude/settings.json` (see `workspace/settings.j
 ```gitignore
 # Relay Protocol ephemeral state
 .claude/.hook-session-start
+.claude/session-config.json
 ```
 
 ## Configuration
@@ -169,11 +170,29 @@ Merge hook registrations into `.claude/settings.json` (see `workspace/settings.j
 
 The Stop hook only enforces when **source files** changed (matched by `sourcePatterns`). Doc-only or config-only sessions pass freely.
 
+## Session Exemptions
+
+Some sessions legitimately don't need to touch every surface — doc-only commits, infra/ops work, emergency hotfixes. Relay Protocol supports per-session exemptions via `.claude/session-config.json`:
+
+```json
+{
+  "exemptSurfaces": ["history", "roadmap"],
+  "reason": "Doc-only spec session — no endpoint or schema changes"
+}
+```
+
+Rules:
+- Only surfaces with `"exemptable": true` in `protocol-config.json` can be skipped
+- The `reason` field is required and should land in your handoff doc
+- The file is gitignored and ephemeral — exemptions don't leak across sessions
+
+See `docs/adr-001-exemption-mechanism.md` for design rationale.
+
 ## Extending
 
 - **Schema validation**: Add `"validateSchema": true` and `"schemaPath": "..."` to a surface entry (requires a custom Zod parser module in your workspace)
-- **Exemptions**: For surfaces that aren't always relevant, create a `.claude/session-config.json` with exemption flags and teach your hook to read them
 - **More surfaces**: Add entries to `protocol-config.json` — the hook reads them dynamically
+- **Custom match logic**: Extend `verify-session-discipline.sh` with new `match` types (e.g., regex, `allOf`)
 
 ## Design Principles
 

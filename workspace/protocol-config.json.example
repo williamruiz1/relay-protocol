@@ -17,10 +17,11 @@
       "name": "history",
       "label": "Session history",
       "path": ".claude/session-history.md",
-      "match": "exact"
+      "match": "exact",
+      "exemptable": true
     }
   ],
   "sourcePatterns": ["^(src/|lib/|app/)"],
   "sourceExclusions": [],
-  "_comment_testExemptSurfaces": "testExemptSurfaces is not implemented by this template hook. Remove this line or implement in your own hook if needed."
+  "$exemption_docs": "Add \"exemptable\": true to any surface that can be skipped on a per-session basis. To exempt during a session, create .claude/session-config.json with { \"exemptSurfaces\": [\"<name>\", ...], \"reason\": \"...\" }. See docs/adr-001-exemption-mechanism.md."
 }
